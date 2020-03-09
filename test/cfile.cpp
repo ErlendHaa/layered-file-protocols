@@ -110,3 +110,34 @@ TEST_CASE(
     err = lfp_close(cfile);
     CHECK(err == LFP_OK);
 }
+
+TEST_CASE(
+    "peek_leaf exposes FILE object",
+    "[cfile][peek]") {
+    std::FILE* fp = std::tmpfile();
+    std::fputs("Very simple file" , fp);
+    std::rewind(fp);
+
+    auto* cfile = lfp_cfile(fp);
+
+    auto buffer = std::vector< unsigned char >(17, 0xFF);
+    std::int64_t nread;
+    auto err = lfp_readinto(cfile, buffer.data(), 17, &nread);
+
+    CHECK(err == LFP_EOF);
+    CHECK(nread == 16);
+
+    void* tmp;
+    err = lfp_peek_leaf(cfile, &tmp);
+    auto* file = static_cast< std::FILE* >(tmp);
+
+    assert(err == LFP_OK);
+
+    auto tell = std::ftell(file);
+
+    CHECK(tell == 16);
+    CHECK(std::feof(file));
+
+    err = lfp_close(cfile);
+    CHECK(err == LFP_OK);
+}

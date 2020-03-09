@@ -38,6 +38,7 @@ public:
     lfp_protocol* peel() noexcept (false) override;
     lfp_protocol* peek() const noexcept (false) override;
 
+    void* peek_leaf() const noexcept (false) override;
 private:
     struct del {
         void operator () (FILE* f) noexcept (true) {
@@ -127,6 +128,11 @@ lfp_protocol* cfile::peel() noexcept (false) {
 
 lfp_protocol* cfile::peek() const noexcept (false) {
     throw lfp::leaf_protocol("peek: not supported for leaf protocol");
+}
+
+void* cfile::peek_leaf() const noexcept (false) {
+    assert(this->fp);
+    return this->fp.get();
 }
 
 }

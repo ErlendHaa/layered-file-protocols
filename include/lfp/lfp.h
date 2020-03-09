@@ -273,6 +273,9 @@ int lfp_peek(lfp_protocol* outer, lfp_protocol** inner);
 LFP_API
 int lfp_eof(lfp_protocol*) noexcept(true);
 
+LFP_API
+int lfp_peek_leaf(lfp_protocol* outer, void** inner) noexcept(true);
+
 /** Get last set error message
  *
  * Obtain a human-readable error message, or `NULL` if no error is set. This
