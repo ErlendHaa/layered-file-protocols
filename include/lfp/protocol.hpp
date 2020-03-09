@@ -82,6 +82,8 @@ public:
      */
     virtual lfp_protocol* peek() const noexcept (false) = 0;
 
+    virtual void* peel_leaf() noexcept (false);
+
     virtual void* peek_leaf() const noexcept (false);
 
     /** \copybrief lfp_errormsg */

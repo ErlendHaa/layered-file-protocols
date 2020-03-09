@@ -274,6 +274,9 @@ LFP_API
 int lfp_eof(lfp_protocol*) noexcept(true);
 
 LFP_API
+int lfp_peel_leaf(lfp_protocol* outer, void** inner) noexcept(true);
+
+LFP_API
 int lfp_peek_leaf(lfp_protocol* outer, void** inner) noexcept(true);
 
 /** Get last set error message

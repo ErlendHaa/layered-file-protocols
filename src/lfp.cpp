@@ -119,6 +119,25 @@ int lfp_peek(lfp_protocol* outer, lfp_protocol** inner) try {
     return e.status();
 }
 
+int lfp_peel_leaf(lfp_protocol* outer, void** inner) noexcept(true) try{
+    assert(outer);
+    assert(inner);
+
+    void* tmp = outer->peel_leaf();
+    if (!tmp) {
+        *inner = nullptr;
+        outer->errmsg("peel: no underlying protocol");
+        return LFP_IOERROR;
+    }
+
+    *inner = tmp;
+    return LFP_OK;
+} catch(const lfp::error& e) {
+    *inner = nullptr;
+    outer->errmsg(e.what());
+    return e.status();
+}
+
 int lfp_peek_leaf(lfp_protocol* outer, void** inner) noexcept(true) try{
     assert(outer);
     assert(inner);
@@ -164,6 +183,10 @@ lfp_protocol* lfp_protocol::peel() noexcept (false) {
 
 lfp_protocol* lfp_protocol::peek() const noexcept (false) {
     throw lfp::not_implemented("peek: not implemented for layer");
+}
+
+void* lfp_protocol::peel_leaf() noexcept (false) {
+    throw lfp::not_implemented("peel_leaf: not implemented for layer");
 }
 
 void* lfp_protocol::peek_leaf() const noexcept (false) {
